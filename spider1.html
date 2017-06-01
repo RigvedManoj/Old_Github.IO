@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>SPIN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 p{
   text-align:center;
@@ -9,9 +9,21 @@ p{
   vertical-align: middle;
   margin: auto;
 }
+@-ms-viewport{
+  width: device-width;
+}
+img
+{
+  text-align:center;
+  vertical-align: middle;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+}
+
 #div1
 {
-  position:fixed;
+  position:absolute;
   top:10%;
   left:90%;
   font-size: 30px;
@@ -19,12 +31,12 @@ p{
 #div2
 {
   background-color: lightblue;
-  position: relative;
+  position: absolute;
   vertical-align: text-top;
   text-align: center;
-  width: 20px;
-  height: 30px;
-  line-height: 30px;
+  width: 40px;
+  height: 60px;
+  line-height: 60px;
   border: 5px solid black;
   padding: 5px;
   margin: 5px;
@@ -37,14 +49,14 @@ p{
 position: relative;
 vertical-align: text-top;
 text-align: center;
-width: 20px;
-height: 30px;
-line-height: 30px;
+width: 40px;
+height: 60px;
+line-height: 60px;
 border: 5px solid black;
 padding: 5px;
 margin: 5px;
-	top: -15px;
-	left:28px;
+	top: -75px;
+	left:48px;
 }
 #div4
 {background-color: lightblue;
@@ -52,14 +64,14 @@ position: relative;
 vertical-align: text-top;
 text-align: center;
 font-size: 30px;
-width: 20px;
-height: 30px;
-line-height: 30px;
+width: 40px;
+height: 60px;
+line-height: 60px;
 border: 5px solid black;
 padding: 5px;
 margin: 5px;
-	top: -15px;
-	left:28px;
+	top: -75px;
+	left:48px;
 }
 button
 {
@@ -68,12 +80,24 @@ button
   width: 5em;
   height: 3em;
   position: relative;
-   top: -10px;
-   left: 50px;
+   top: -70px;
+   left: 55px;
+}
+#button1
+{
+  top:-130px;
+  left:-210px;
+}
+#button2
+{
+  position: absolute;
+    width:10em;
+  top:20%;
+  left:48%;
 }
 #p5
 {
-  position:fixed;
+  position:absolute;
   font-size: 30px;
   top:60%;
   left:45%;
@@ -83,42 +107,76 @@ button
 <body>
 <div id="div1">Score<p id ="p1"></p></div>
 <div id ="div2">
-  <p id="p2"></p>
+  <img id="p2" src="f0.png"></img>
 <div id ="div3">
-  <p id="p3"></p>
+  <img id="p3" src="f0.png"></img>
 <div id ="div4">
-  <p id="p4"></p>
-<button id="button" onclick ="Start()">SPIN</button></div></div></div>
+  <img id="p4" src="f0.png"></img>
+<button id="button" onclick ="Start()">SPIN</button>
+<button id="button1" onclick ="Stop()">STOP</button></div></div></div>
+<button id="button2" onclick ="Restart()">RESTART</button>
 <p id="p5"></p>
 <script>
-var score=0,i=0,x1,x2,x3,s;
+var score=0,x1,x2,x3,s;
+document.getElementById("button1").disabled=true;
+function Restart()
+{
+   score=0;
+   clearInterval(s);
+   document.getElementById('p5').innerHTML=" ";
+   document.getElementById("p1").innerHTML=" ";
+   document.getElementById("p4").src="f0.png";
+   document.getElementById("p3").src="f0.png";
+   document.getElementById("p2").src="f0.png";
+   document.getElementById("button").disabled=false;
+   document.getElementById("button1").disabled=true;
+}
 function Start()
-{i=0;
+{
   document.getElementById("p5").innerHTML=" ";
   document.getElementById("button").disabled=true;
   s=setInterval(run,3);
 }
 function run(){
-  i++;
-  x1 = Math.floor((Math.random() * 3) + 1);
-  x2 = Math.floor((Math.random() * 3) + 1);
-  x3 = Math.floor((Math.random() * 3) + 1);
- document.getElementById("p4").innerHTML=x1;
- document.getElementById("div4").style.top="-45px";
- document.getElementById("p3").innerHTML=x2;
- document.getElementById("div3").style.top="-45px";
- document.getElementById("p2").innerHTML=x3;
- document.getElementById("button").style.top="-40px";
- if(i>100)
- {clearInterval(s);
+ x1 = Math.floor((Math.random() * 3) + 1);
+ x2 = Math.floor((Math.random() * 3) + 1);
+ x3 = Math.floor((Math.random() * 3) + 1);
+ if(x1==1)
+ document.getElementById("p4").src="f1.png";
+ else if(x1==2)
+ document.getElementById("p4").src="f2.png";
+ else
+ document.getElementById("p4").src="f3.png";
+ if(x2==1)
+ document.getElementById("p3").src="f1.png";
+ else if(x2==2)
+ document.getElementById("p3").src="f2.png";
+ else
+ document.getElementById("p3").src="f3.png";
+ if(x3==1)
+ document.getElementById("p2").src="f1.png";
+ else if(x3==2)
+ document.getElementById("p2").src="f2.png";
+ else
+ document.getElementById("p2").src="f3.png";
+ document.getElementById("button1").disabled=false;
+ }
+ function Stop()
+ {
+   clearInterval(s);
    document.getElementById("button").disabled=false;
+   document.getElementById("button1").disabled=true;
    if(x1==x2&&x1==x3)
-   {score+=x1;
+   {score+=100;
      document.getElementById("p1").innerHTML=score;
      document.getElementById('p5').innerHTML="YOU SCORED";
-       document.getElementById("button").disabled=false;
-   }}
-  }
+   }
+   else
+     {
+       score--;
+        document.getElementById("p1").innerHTML=score;
+     }
+ }
 
 </script>
 </body>
