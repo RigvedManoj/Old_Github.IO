@@ -97,6 +97,7 @@
     <script>
     var i=200,j=280,kq=0,y,arrow=5;
     var z,aq=0,aq1=1000,s,count=0;
+     document.getElementById("button3").disabled=true;
     document.getElementById("button2").disabled=true;
     function running()
     {
@@ -230,6 +231,7 @@ running();
     function pause()
     {document.getElementById("button2").disabled=false;
      document.getElementById("button1").disabled=true;
+     document.getElementById("button3").disabled=false;
       document.getElementById("div1").innerHTML="PAUSED";
       window.onkeydown=null;
       window.onkeyup=null;
@@ -240,6 +242,7 @@ running();
     function resume()
     {document.getElementById("button1").disabled=false;
      document.getElementById("button2").disabled=true;
+      document.getElementById("button3").disabled=true;
       document.getElementById("div1").innerHTML="";
       window.onkeydown=a1;
       window.onkeyup=a2;
