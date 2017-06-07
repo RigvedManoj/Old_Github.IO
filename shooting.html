@@ -1,0 +1,261 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <style>
+    body
+    {
+    background-image: url("nature2.png");
+    background-size:cover;
+    background-repeat: no-repeat;
+    }
+    button
+    {
+      background:lightgreen;
+      border-radius: 20px;
+      width: 15em;
+      height: 3em;
+      position: fixed;
+       top: 0px;
+       left: 300px;
+    }
+    #button2
+    {
+      left:600px;
+    }
+    #button3
+    {
+      left:900px;
+    }
+    #quiver
+    {
+    position: fixed;
+    left:480px;
+    top:600px;
+    width: 80px;
+    height:80px;
+    }
+    p
+    {
+      position:fixed;
+      font-size: 30px;
+      font-family: sans-serif;
+      left:700px;
+      top:600px;
+    }
+    #p1
+    {
+      left:850px;
+    }
+    #p2
+    {
+      left:550px;
+      top:600px;
+    }
+    img
+    {
+      position: fixed;
+      top: 200px;
+      width:200px;
+      height:200px;
+    }
+    #img3
+    {
+      position: fixed;
+     transform: rotate(195deg);
+     top:500px;
+      left:1130px;
+    }
+    #img1
+    {
+      position: fixed;
+      top: 245px;
+      left:200px;
+      width:200px;
+      height:50px;
+    }
+    #div1
+    {
+      position: fixed;
+      top:300;
+      left:600;
+      font-size: 50px;
+      font-family: monospace;
+    }
+    </style>
+  </head>
+  <body>
+    <button id="button1" onclick="pause()">PAUSE</button>
+    <button id="button2" onclick="resume()">RESUME</button>
+    <button id="button3" onclick="restart()">RESTART</button>
+    <img id="img3" src="t2.png"></img>
+    <img id="img2" src="bw1.png"></img>
+    <img id="img1" src="f0.png"></img>
+    <p>SCORE:<p id="p1"></p></p>
+    <div id="div1"></div>
+    <div><img id="quiver" src="q2.png"></img><p id="p2">:5</p><div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+    var i=200,j=280,kq=0,y,arrow=5;
+    var z,aq=0,aq1=1000,s,count=0;
+    document.getElementById("button2").disabled=true;
+    function running()
+    {
+      document.getElementById("img3").style.top="500px";
+    jQuery(function($){
+      (function swoop(element) {
+
+          element
+              .animate({top:'0px'}, 8000)
+              .animate({top:'500px'}, 8000, function(){
+                  s=setTimeout(function(){
+                      swoop(element);
+                  }, 100);
+              });
+      })($('#img3'));
+  });
+}
+running();
+    window.onkeyup = a2;
+    function a2(){
+       var char = event.which || event.keyCode;
+
+       if(char==87)
+       {
+         clearInterval(y);
+         kq=0;
+       }
+       if(char==83)
+       {
+         clearInterval(y);
+         kq=0;
+       }
+    }
+    window.onkeydown=a1;
+    function a1() {
+       var char = event.which || event.keyCode;
+       if(char==32)
+       {
+         arrow--;
+         document.getElementById("p2").innerHTML=": "+arrow;
+           $("#img1").fadeIn();
+           window.onkeydown=null;
+             window.onkeyup = a2;
+         document.getElementById("img1").src="arrow.png";
+          document.getElementById("img1").style.left="0px";
+          document.getElementById("img1").style.top=j+"px";
+          aq=parseFloat($("#img3").css("top"));
+          aq1=parseFloat($("#img2").css("top"));
+          $("#img1").animate({left: '1050px'},1500,over);
+           document.getElementById("img2").src="bow.png";
+       }
+       if(char==87)
+       {  window.onkeyup=a2;
+         if(kq==0)
+          y=setInterval(b1,8);
+       }
+       if(char==83)
+       {  window.onkeyup=a2;
+         if(kq==0)
+          y=setInterval(b2,8);
+       }
+    }
+    function over(){
+      aq=parseFloat($("#img3").css("top"));
+      aq1=parseFloat($("#img1").css("top"));
+    if(aq1>=(aq-10)&&aq1<=(aq+190))
+   {
+    if(aq1>=(aq+90)&&aq1<=(aq+110))
+    count+=50;
+    if((aq1>=(aq+70)&&aq1<=(aq+90))||(aq1>=(aq+110)&&aq1<=(aq+130)))
+    count+=40;
+    if((aq1>=(aq+50)&&aq1<=(aq+70))||(aq1>=(aq+130)&&aq1<=(aq+150)))
+    count+=30;
+    if((aq1>=(aq+30)&&aq1<=(aq+50))||(aq1>=(aq+150)&&aq1<=(aq+170)))
+    count+=20;
+    if((aq1>=(aq-10)&&aq1<=(aq+30))||(aq1>=(aq+170)&&aq1<=(aq+190)))
+    count+=10;
+    $("#img1").fadeOut(1000,"swing",function ches()
+    { document.getElementById("img2").src="bw1.png";
+    document.getElementById("img1").style.left="0px"; });
+   }
+   else {
+    $("#img1").animate({left: '1350px'},500,function over1(){
+      document.getElementById("img1").src="f0.png";
+        document.getElementById("img1").style.left="0px";
+        document.getElementById("img2").src="bw1.png";
+    });
+   }
+   document.getElementById("p1").innerHTML=count;
+   if(arrow==0)
+   {document.getElementById("div1").innerHTML="GAME OVER";
+   window.onkeydown=null;
+   window.onkeyup=null;
+   document.getElementById("button1").disabled=true;
+   document.getElementById("button2").disabled=true;
+   $("#img3").stop();
+     $("#img3").stop();
+   clearTimeout(s);
+ }
+ else
+   window.onkeydown = a1;
+ }
+    function b1()
+    {
+      kq=1;
+      if(i<0)
+      {clearInterval(y);
+        kq=0;
+      }
+      else {
+        i--;
+          j--;
+          document.getElementById("img2").style.top= i+"px";
+          //document.getElementById("img1").style.top= j+"px";
+      }
+       }
+       function b2()
+       {
+         kq=1;
+         if(i>450)
+         {clearInterval(y);
+           kq=0;
+         }
+         else {
+           i++;
+             j++;
+             document.getElementById("img2").style.top= i+"px";
+             //document.getElementById("img1").style.top= j+"px";
+         }
+          }
+    function pause()
+    {document.getElementById("button2").disabled=false;
+     document.getElementById("button1").disabled=true;
+      document.getElementById("div1").innerHTML="PAUSED";
+      window.onkeydown=null;
+      window.onkeyup=null;
+      $("#img3").stop();
+        $("#img3").stop();
+      clearTimeout(s);
+    }
+    function resume()
+    {document.getElementById("button1").disabled=false;
+     document.getElementById("button2").disabled=true;
+      document.getElementById("div1").innerHTML="";
+      window.onkeydown=a1;
+      window.onkeyup=a2;
+      running();
+    }
+    function restart()
+    {
+      i=200;
+      j=280;
+      kq=0;
+      arrow=5;
+      count=0
+      document.getElementById("p1").innerHTML="";
+      document.getElementById("p2").innerHTML=":"+arrow;
+      document.getElementById("img2").style.top=i+"px";
+      resume();
+    }
+    </script>
+  </body>
