@@ -4,6 +4,12 @@
     <link rel="stylesheet" type="text/css" href=style.css>
   </head>
   <body>
+    <audio id="au2">
+  <source src="s1.mp3" type="audio/mp3">
+</audio>
+<audio id="au1">
+<source src="s3.mp3" type="audio/mp3">
+</audio>
     <button id="button1" onclick="pause()">PAUSE</button>
     <button id="button2" onclick="resume()">RESUME</button>
     <button id="button3" onclick="restart()">RESTART</button>
@@ -62,11 +68,14 @@ running();
            $("#img1").fadeIn();
            window.onkeydown=null;
              window.onkeyup = a2;
+        var sound= document.getElementById("au1");
          document.getElementById("img1").src="arrow.png";
           document.getElementById("img1").style.left="0px";
           document.getElementById("img1").style.top=j+"px";
           aq=parseFloat($("#img3").css("top"));
           aq1=parseFloat($("#img2").css("top"));
+          sound.load();
+          sound.play();
           $("#img1").animate({left: '1050px'},1500,over);
            document.getElementById("img2").src="bow.png";
        }
@@ -86,6 +95,9 @@ running();
       aq1=parseFloat($("#img1").css("top"));
     if(aq1>=(aq-10)&&aq1<=(aq+190))
    {
+       var sound1= document.getElementById("au2");
+       sound1.load();
+       sound1.play();
     if(aq1>=(aq+90)&&aq1<=(aq+110))
     count+=50;
     if((aq1>=(aq+70)&&aq1<=(aq+90))||(aq1>=(aq+110)&&aq1<=(aq+130)))
