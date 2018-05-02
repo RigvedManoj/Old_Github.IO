@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+  cursor: pointer;
+}
+#p1{
+    position: fixed;
+    font-size: 20px;
+    font-weight: bolder;
+    color: red;
+    top:600px;
+    left:650px;
+}
+#header{
+	position: fixed;
+    font-size: 30px;
+    font-weight: bolder;
+    color: red;
+    top:50px;
+    left:620px;
+}
+#body{
+	background-color: black;
+}
+</style>
+</head>
+<body id="body">
+<canvas id="myCanvas" width="1350" height="630" onclick="position(event)"style="border:1px solid #000000;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+<p id="header">ISOLATION</p>
+<p id="p1">MOVE PIECE</p>
+<script>
+//Variable Definitions
+var bluex=725,bluey=175,redx=675,redy=525;//positon of pieces
+var check=0,switching=1;
+var arrx=[],arry=[];//To store invalid tiles
+//Defining Canvas
+var element=document.getElementById("myCanvas");
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+//-----------------------------------------------------------------------------------------------
+                              //REQUIRED FUNCTIONS
+//Erase Tile
+function erase(x,y)
+{
+  ctx.beginPath();
+  ctx.fillStyle="white";
+  ctx.fillRect(x-25,y-25, 50,50);
+  ctx.rect(x-25, y-25, 50,50);
+  arrx.push(x);
+  arry.push(y);
+}
+//Check if Tile Valid
+function valid(x,y)
+{
+  check=1;
+  if((x>500 && x<900 && y>150 && y<550)&&(x!=redx || y!=redy)&&(x!=bluex || y!=bluey))
+  {
+    check=0;
+    for(var i=0;i<arrx.length;i++)
+    {
+      if(x==arrx[i] && y==arry[i])
+      {
+        check=1;
+        break;
+      }
+    }
+  }
+  if(check==0)
+    return true;
+  else
+    return false;
+}
+//Checks Near Pieces
+function bluemove(x,y)
+{
+  return move(x,y,bluex,bluey,redx,redy);
+}
+function redmove(x,y)
+{
+  return move(x,y,redx,redy,bluex,bluey);
+}
+function move(x,y,x1,y1,x2,y2)
+{
+  if(((x-x1==50 || x1-x==50 || x==x1)&&(y-y1==50 || y1-y==50 || y==y1))&&((x-x2!=50 && x2-x!=50 && x!=x2)||(y-y2!=50 && y2-y!=50 && y!=y2)))
+    return true;
+  else
+    return false;
+}
+//Counts all valid tiles nearby
+function redcount(x,y)
+{
+  return count(x,y,bluex,bluey);
+}
+function bluecount(x,y)
+{
+  return count(x,y,redx,redy);
+}
+function count(x1,y1,x2,y2)
+{
+  var count=0;
+  for(var i=-1;i<=1;i++)
+    for(var j=-1;j<=1;j++)
+    {
+      var x=x1+i*50;
+      var y=y1+j*50;
+      if(valid(x,y) && move(x,y,x1,y1,x2,y2))
+      {
+        count++;
+      }
+    }
+  return count;
+}
+//distance from centre
+function distfromcentre(x,y)
+{
+  var x1,y1;
+  if(x>700)
+    x1=x-700;
+  else
+    x1=700-x;
+  if(y>350)
+    y1=y-350;
+  else
+    y1=350-y;
+  return (Math.sqrt((x1*x1)+(y1*y1)));
+}
+//-----------------------------------------------------------------------------------------------
+                                //ACTUAL GAME
+//Get Position from Clicked Tile
+function position(event)
+{
+  var x = event.clientX;
+  var y = event.clientY;
+  console.log(x,y);
+  x=x-x%50+25;
+  y=y-y%50+25;
+  if(valid(x,y))
+  {
+    if(switching==1)
+    {
+      console.log(x,y);
+      if(redmove(x,y))
+      {
+        switching=0;
+        document.getElementById("p1").innerHTML="ERASE TILE";
+        redx=x;
+        redy=y;
+      }
+      setup();
+    }
+    else if(switching==0)
+    {
+      console.log(1);
+      switching=2;
+      document.getElementById("p1").innerHTML="OPPONENT'S TURN";
+      erase(x,y);
+      setup();
+      setTimeout(comp_play,1000);
+    }
+  }
+}
+//Computer's Turn
+function comp_play()
+{
+  var max=0,dist=1000000;
+  var tempx,tempy;
+  tempx=bluex;
+  tempy=bluey;
+  for(var i=-1;i<=1;i++)
+    for(var j=-1;j<=1;j++)
+    {
+      var x=bluex+i*50;
+      var y=bluey+j*50;
+      if(valid(x,y) && bluemove(x,y))
+      {
+      	if(bluecount(x,y)>=max)
+        {
+            tempx=x;
+            tempy=y;
+            max=bluecount(x,y);
+        }
+        else if(bluecount(x,y)==max)
+        {
+          	if(distfromcentre(x,y)<dist)
+          	{
+          		dist=distfromcentre(x,y);
+          		tempx=x;
+          		tempy=y;
+        	}
+        }
+      }
+    }
+    max=bluecount(tempx,tempy);
+  if(max==0)
+  {
+    switching=-1;
+    document.getElementById("p1").innerHTML="YOU WIN";
+  }
+  else
+  {
+    bluex=tempx;
+    bluey=tempy;
+    setup();
+    max=0,dist=1000000;
+    for(var i=-1;i<=1;i++)
+      for(var j=-1;j<=1;j++)
+      {
+        var x=redx+i*50;
+        var y=redy+j*50;
+        if(valid(x,y) && redmove(x,y))
+        {
+          if(redcount(x,y)>max)
+          {
+              tempx=x;
+              tempy=y;
+              max=redcount(x,y);
+          }
+          else if(redcount(x,y)==max)
+          {
+            if(distfromcentre(x,y)<dist)
+            {
+              dist=distfromcentre(x,y);
+              tempx=x;
+              tempy=y;
+            }
+          }
+        }
+      }
+      if(tempx==bluex && tempy==bluey)
+      	 for(var i=-1;i<=1;i++)
+      		for(var j=-1;j<=1;j++)
+      	{
+        	var x=redx+i*50;
+        	var y=redy+j*50;
+        	if(valid(x,y))
+        	{
+          		if(redcount(x,y)>max)
+          		{
+              		tempx=x;
+              		tempy=y;
+              		max=redcount(x,y);
+          		}
+          		else if(redcount(x,y)==max)
+          		{
+            		if(distfromcentre(x,y)<dist)
+            		{
+              			dist=distfromcentre(x,y);
+              			tempx=x;
+              			tempy=y;
+            		}
+          		}
+        	}
+      	}
+      erase(tempx,tempy);
+    setup();
+    if(redcount(redx,redy)==0)
+    {
+      switching=-1;
+      document.getElementById("p1").innerHTML="YOU LOSE";
+    }
+    else
+    {
+      switching=1;
+      document.getElementById("p1").innerHTML="MOVE PIECE";
+    }
+  }
+}
+//-----------------------------------------------------------------------------------------------
+                              //SETTING UP
+//Creating and Moving Pieces
+function pieces()
+{
+  ctx.beginPath();
+  ctx.arc(bluex, bluey, 15, 0, 2 * Math.PI);
+  ctx.fillStyle = "blue";
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(redx, redy, 15, 0, 2 * Math.PI);
+  ctx.fillStyle = "red";
+  ctx.fill();
+  ctx.stroke();
+}
+//Creaing Board and Drawing Tiles
+function setup()
+{
+  ctx.beginPath();
+  ctx.fillStyle="brown";
+  //creates all tiles
+  for( var i=0;i<8;i++)
+  {
+    for (var j=0;j<8;j++)
+    {
+      ctx.fillRect(500+50*i, 150+50*j, 50,50);
+      ctx.rect(500+50*i, 150+50*j, 50,50);
+    }
+  }
+  ctx.stroke();
+  //erases invalid tiles
+  if(arrx.length!=0)
+  {
+    ctx.beginPath();
+    ctx.fillStyle="white";
+    for(var i=0;i<arrx.length;i++)
+    {
+      ctx.fillRect(arrx[i]-25,arry[i]-25, 50,50);
+      ctx.rect(arrx[i]-25,arry[i]-25, 50,50);
+    }
+    ctx.stroke();
+  }
+  //creates pieces
+  pieces();
+}
+//Game Starts
+setup();
+</script>
+</body>
+</html>
